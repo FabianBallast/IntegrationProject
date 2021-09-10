@@ -34,6 +34,8 @@ M = simplify(M, 5);
 F = simplify(F, 5);
 qSol = M\F;
 
+% test
+
 %% Plot data
 load osc_th2
 
