@@ -52,4 +52,4 @@ theta_2 = angles_raw.Data(:, 2);
 
 input = Input.Data;
 
-save sin3Hz t theta_1 theta_2 input
+save sin2p2HzFullPower t theta_1 theta_2 input
