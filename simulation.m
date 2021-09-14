@@ -2,7 +2,7 @@
 clear; clc;
 
 %% Set constant model parameters
-load model_parameters
+load data/constPar/model_parameters
 model_par.c2 = c2;
 model_par.b = b;
 model_par.g = g;
