@@ -13,7 +13,7 @@ H = E + l_link2 * [sin(Theta1 + Theta2), cos(Theta1 + Theta2)];
 
 %% Make animation
 figure()
-p = plot([0, E(1,1), H(1,1)], [0, E(i, 2), H(i, 2)],'-o');
+p = plot([0, E(1,1), H(1,1)], [0, E(1, 2), H(1, 2)],'-o');
 xlim([-0.2, 0.2]);
 ylim([-0.2, 0.2]);
 pause(t(2));
