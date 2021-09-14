@@ -9,8 +9,8 @@ q = [theta2];
 dq = [dtheta2];
 ddq = [ddtheta2];
 
-pos =[c2 * sin(theta2);
-      c2 * (1-cos(theta2));
+pos =[-c2 * sin(theta2);
+      -c2 * cos(theta2);
       theta2];
 
 vel = jacobian(pos, q) * dq;
@@ -34,10 +34,8 @@ M = simplify(M, 5);
 F = simplify(F, 5);
 qSol = M\F;
 
-% test
-
 %% Plot data
-load osc_th2
+load data/sysID/osc_th2
 
 plot(t, theta_2)
 %% Test simple integration
