@@ -94,4 +94,15 @@ nlgr.Parameters(4).Maximum = 0.1;
 
 nlgr = nlgreyest(z,nlgr);
 
+figure()
 compare(z,nlgr,Inf)
+
+%%
+par = getpvec(nlgr);
+b = par(1);
+c2 = par(2);
+m2 = par(3);
+J2 = par(4);
+g = par(5);
+
+save model_parameters b c2 g m2 J2
