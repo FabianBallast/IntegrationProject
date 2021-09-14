@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DSCS FPGA interface board: init and I/O conversions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load calibration
+load data/constPar/calibration
 
 % gains and offsets
 daoutoffs = -[-0.0025];                   % output offset

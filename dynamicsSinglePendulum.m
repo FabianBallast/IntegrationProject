@@ -105,4 +105,4 @@ m2 = par(3);
 J2 = par(4);
 g = par(5);
 
-save model_parameters b c2 g m2 J2
+save data/constPar/model_parameters b c2 g m2 J2
