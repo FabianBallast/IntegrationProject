@@ -16,11 +16,11 @@ d_joint2_link1 = 0.040;
 
 
 %% Motor stats
-MAXON DC motor
-310531
-887372
+% MAXON DC motor
+% 310531
+% 887372
 
 %% Gear
-Maxon gear
-166938
-https://www.maxongroup.nl/maxon/view/product/gear/planetary/gp32/166938
+% Maxon gear
+% 166938
+% https://www.maxongroup.nl/maxon/view/product/gear/planetary/gp32/166938
