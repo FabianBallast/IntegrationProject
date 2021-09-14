@@ -37,9 +37,8 @@ EoM = ddTddqdt - dTdq + dVdq == -dDddq;
 M = simplify(M, 5);
 F = simplify(F, 5);
 
-M_e = [M, [0; 0]; 0,0, L_mot];
-F_e = [F+ [k_mot * i_mot; 0] ; -i_mot*R_mot + V_in - k_mot * dtheta1];
-qSol = M_e\F_e;
+M_e= [M, [-k_
+qSol = M\F;
 
 %% Test
 step_size = 0.001;
@@ -65,7 +64,7 @@ m2_sim = 0.1;
 J2_sim = 1/12*0.1^2*0.048;
 
 k_gear_sim = 33;
-k_mot_sim = 0.01;
+k_mot_sim = 0.0001;
 R_mot_sim = 2;
 L_mot_sim = 0.001;
 V_in_sim = 5;
