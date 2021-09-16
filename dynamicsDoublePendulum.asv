@@ -50,9 +50,9 @@ sol_sim(:, 1) = [theta1_0; dtheta1_0; theta2_0; dtheta2_0];
 
 c1_sim = 0.040;
 l1_sim = 0.100;
-b1_sim = 0.0004;
+b1_sim = 0.004;
 m1_sim = 0.4;
-J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2);
+J1_sim = 1/12*m1_sin*(l1_sim^2 + 0.015);
 c2_sim = 0.070;
 g_sim = 9.81;
 b2_sim = 0.00004;

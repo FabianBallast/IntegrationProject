@@ -54,7 +54,7 @@ qSol = M\F;
 
 %% Test
 step_size = 0.0001;
-t_sim = 0:step_size:5;
+t_sim = 0:step_size:20;
 theta1_0 = pi/2;
 dtheta1_0  = 0;
 theta2_0 = 0;
@@ -106,9 +106,9 @@ par.l_link2 = l_link2;
 
 dt_vis = 0.05;
 ind_step = dt_vis / step_size;
-ind = 1:ind_step:length(t_sim); 
+ind = linspace(1, ind_step
 
-visualize_pendulum(t_sim(ind), sol_sim(1,ind)', sol_sim(3,ind)', par);
+visualize_pendulum(t_sim, sol_sim(1,:)', sol_sim(3,:)', par);
 
 %% Create LaTex version with derivatives
 rawStr = latex(qSol);

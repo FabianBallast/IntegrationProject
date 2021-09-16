@@ -9,7 +9,7 @@ function [x] = RK4(t, x0, ODE)
 %   Output:
 %      x  - Array of size (m x n) with all positions over time. 
 
-    dt = ti(2);
+    dt = t(2);
     n = length(t);
     m = length(x0);
    
