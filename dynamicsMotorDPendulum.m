@@ -59,11 +59,10 @@ theta1_0 = pi;
 dtheta1_0  = 0;
 theta2_0 = 0;
 dtheta2_0  = 0;
-c_mot_0 = 0;
 i_mot_0 = 0;
 
 % sol_sim = zeros(6, length(t_sim));
-x0 = [theta1_0; dtheta1_0; theta2_0; dtheta2_0; c_mot_0; i_mot_0];
+x0 = [theta1_0; dtheta1_0; theta2_0; dtheta2_0; i_mot_0];
 
 c1_sim = 0.040;
 l1_sim = 0.100;
@@ -85,11 +84,11 @@ V_in_sim = 3.5;
 acc_sol = subs(qSol, [b1 l1 c1 m1 J1 b2 c2 g m2 J2 k_gear k_mot R_mot L_mot V_in],...
     [b1_sim l1_sim c1_sim m1_sim J1_sim b2_sim c2_sim g_sim m2_sim J2_sim ...
     k_gear_sim k_mot_sim R_mot_sim L_mot_sim V_in_sim]);
-acc_sol = [dtheta1; acc_sol(1); dtheta2; acc_sol(2); dc_mot; acc_sol(3)];
-acc = matlabFunction(acc_sol,'Vars',[theta1; dtheta1; theta2; dtheta2; c_mot; dc_mot]);
+acc_sol = [dtheta1; acc_sol(1); dtheta2; acc_sol(2); acc_sol(3)];
+acc = matlabFunction(acc_sol,'Vars',[theta1; dtheta1; theta2; dtheta2; dc_mot]);
 
 % acc2 = @(th1, dth1, th2, dth2) acc()
-ODE = @(x) acc(x(1), x(2), x(3), x(4), x(5), x(6));
+ODE = @(x) acc(x(1), x(2), x(3), x(4), x(5));
 sol_sim = RK4(t_sim, x0, ODE);
 
 figure(2)
@@ -116,7 +115,7 @@ load data/sysID/sin2p2Hz
 theta_1 = medfilt1(unwrap(theta_1), 3);
 theta_2 = medfilt1(unwrap(theta_2), 3);
 
-data1 = iddata([theta_1, theta_2], input, t(5)-t(4));
+data1 = iddata([theta_1(1:200), theta_2(1:200)], input(1:200)*15, t(5)-t(4));
 
 figure(1)
 plot(t, theta_1, t, theta_2)
@@ -133,46 +132,77 @@ plot(t, theta_1, t, theta_2)
 %%
 data_full = merge(data1, data2);
 
-% c1_sim = 0.040;
-% l1_sim = 0.100;
-% b1_sim = 0.0004;
-% m1_sim = 0.4;
-% J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2);
+load data/constPar/model_parameters
+
+c1_sim = 0.040;
+l1_sim = 0.100;
+b1_sim = 0.0004;
+m1_sim = 0.4;
+J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2);
 % c2_sim = 0.070;
 % g_sim = 9.81;
 % b2_sim = 0.00004;
 % m2_sim = 0.1;
 % J2_sim = 1/12*0.1^2*0.048;
-% 
-% k_gear_sim = 33;
-% k_mot_sim = 0.0385;
-% R_mot_sim = 0.1;
-% L_mot_sim = 0.0000717;
-% V_in_sim = 3.5;
+c2_sim = c2;
+g_sim = g;
+b2_sim = b2;
+m2_sim = m2;
+J2_sim = J2;
 
-fileName = 'doublePend';
-order = [2 1 4];
+
+k_gear_sim = 33;
+k_mot_sim = 0.0385;
+R_mot_sim = 0.1;
+L_mot_sim = 0.0000717;
+V_in_sim = 3.5;
+
+% matlabFunction(qSol,'Vars',[theta1; dtheta1; theta2; dtheta2; dc_mot; V_in; c1; l1; b1; m1; J1; c2; g; b2; m2; J2; k_gear; k_mot; R_mot; L_mot],'File', 'DoublePendMotor')
+fileName = 'DoublePendMotor';
+order = [2 1 5];
 Parameters = {c1_sim, l1_sim, b1_sim, m1_sim, J1_sim, c2_sim, g_sim, b2_sim, m2_sim, J2_sim, k_gear_sim, k_mot_sim, R_mot_sim, L_mot_sim};
-InitialStates = [theta_2(t == 0.773);0];
+InitialStates = [data1.OutputData(1, 1);0;data1.OutputData(1, 2);0;0];
 Ts = 0;
 nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
-    'Name','Single Pendulum');
+    'Name','Double Pendulum Motor');
 
-nlgr.Parameters(5).Fixed = true;
+nlgr.Parameters(6).Fixed = true;
+nlgr.Parameters(7).Fixed = true;
+nlgr.Parameters(8).Fixed = true;
+nlgr.Parameters(9).Fixed = true;
+nlgr.Parameters(10).Fixed = true;
+nlgr.Parameters(11).Fixed = true;
 nlgr.Parameters(1).Minimum = 0;
-nlgr.Parameters(2).Minimum = 0;
+nlgr.Parameters(2).Minimum = 0.09;
 nlgr.Parameters(3).Minimum = 0;
 nlgr.Parameters(4).Minimum = 0;
+nlgr.Parameters(5).Minimum = 0;
+nlgr.Parameters(6).Minimum = 0;
+nlgr.Parameters(8).Minimum = 0;
+nlgr.Parameters(9).Minimum = 0;
+nlgr.Parameters(10).Minimum = 0;
+nlgr.Parameters(12).Minimum = 0;
+nlgr.Parameters(13).Minimum = 0;
+nlgr.Parameters(14).Minimum = 0;
 
-nlgr.Parameters(1).Maximum = 0.0004;
+nlgr.Parameters(1).Maximum = 0.1;
 nlgr.Parameters(2).Maximum = 0.12;
-nlgr.Parameters(3).Maximum = 1;
-nlgr.Parameters(4).Maximum = 0.1;
+nlgr.Parameters(3).Maximum = 0.001;
+nlgr.Parameters(4).Maximum = 0.5;
+nlgr.Parameters(5).Maximum = 0.0035;
+nlgr.Parameters(6).Maximum = 0.1;
+nlgr.Parameters(8).Maximum = 0.0004;
+nlgr.Parameters(9).Maximum = 0.12;
+nlgr.Parameters(10).Maximum = 0.01;
+nlgr.Parameters(12).Maximum = 0.4;
+nlgr.Parameters(13).Maximum = 1;
+nlgr.Parameters(14).Maximum = 0.000717;
 
-nlgr = nlgreyest(z,nlgr);
+opt = nlgreyestOptions('Display', 'On','SearchMethod','fmincon');
+nlgr = nlgreyest(data1,nlgr, opt);
 
-figure()
-compare(z,nlgr,Inf)
+figure(3)
+compare(data1,nlgr,Inf)
 
 
 %% Create LaTex version with derivatives

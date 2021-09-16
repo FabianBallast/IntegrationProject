@@ -92,17 +92,18 @@ nlgr.Parameters(2).Maximum = 0.12;
 nlgr.Parameters(3).Maximum = 1;
 nlgr.Parameters(4).Maximum = 0.1;
 
-nlgr = nlgreyest(z,nlgr);
+opt = nlgreyestOptions('Display', 'On');
+nlgr = nlgreyest(z,nlgr,opt);
 
 figure()
 compare(z,nlgr,Inf)
 
 %%
 par = getpvec(nlgr);
-b = par(1);
+b2 = par(1);
 c2 = par(2);
 m2 = par(3);
 J2 = par(4);
 g = par(5);
 
-save data/constPar/model_parameters b c2 g m2 J2
+save data/constPar/model_parameters b2 c2 g m2 J2
