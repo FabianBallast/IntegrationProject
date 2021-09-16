@@ -6,7 +6,7 @@ h = 0.001;
 % theta_1 = angles_raw.Data(:, 1);
 % theta_2 = angles_raw.Data(:, 2);
 %%
-% save data t theta_1 theta_2
+ save data t theta_1 theta_2
 %% Check the data in a plot
 
 figure();
@@ -52,4 +52,4 @@ theta_2 = angles_raw.Data(:, 2);
 
 input = Input.Data;
 
-save sin2p2HzFullPower t theta_1 theta_2 input
+save data/sysID/fullRots t theta_1 theta_2 input

@@ -54,8 +54,8 @@ qSol = M\F;
 
 %% Test
 step_size = 0.0001;
-t_sim = 0:step_size:5;
-theta1_0 = pi/2;
+t_sim = 0:step_size:10;
+theta1_0 = pi;
 dtheta1_0  = 0;
 theta2_0 = 0;
 dtheta2_0  = 0;
@@ -80,7 +80,7 @@ k_gear_sim = 33;
 k_mot_sim = 0.0385;
 R_mot_sim = 0.1;
 L_mot_sim = 0.0000717;
-V_in_sim = 0;
+V_in_sim = 3.5;
 
 acc_sol = subs(qSol, [b1 l1 c1 m1 J1 b2 c2 g m2 J2 k_gear k_mot R_mot L_mot V_in],...
     [b1_sim l1_sim c1_sim m1_sim J1_sim b2_sim c2_sim g_sim m2_sim J2_sim ...
@@ -109,6 +109,71 @@ ind_step = dt_vis / step_size;
 ind = 1:ind_step:length(t_sim); 
 
 visualize_pendulum(t_sim(ind), sol_sim(1,ind)', sol_sim(3,ind)', par);
+
+%% Create data
+load data/sysID/sin2p2Hz 
+
+theta_1 = medfilt1(unwrap(theta_1), 3);
+theta_2 = medfilt1(unwrap(theta_2), 3);
+
+data1 = iddata([theta_1, theta_2], input, t(5)-t(4));
+
+figure(1)
+plot(t, theta_1, t, theta_2)
+
+load data/sysID/fullRots
+
+theta_1 = medfilt1(unwrap(theta_1), 3);
+theta_2 = medfilt1(unwrap(theta_2), 3);
+
+data2 = iddata([theta_1, theta_2], input, t(5)-t(4));
+
+figure(2)
+plot(t, theta_1, t, theta_2)
+%%
+data_full = merge(data1, data2);
+
+% c1_sim = 0.040;
+% l1_sim = 0.100;
+% b1_sim = 0.0004;
+% m1_sim = 0.4;
+% J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2);
+% c2_sim = 0.070;
+% g_sim = 9.81;
+% b2_sim = 0.00004;
+% m2_sim = 0.1;
+% J2_sim = 1/12*0.1^2*0.048;
+% 
+% k_gear_sim = 33;
+% k_mot_sim = 0.0385;
+% R_mot_sim = 0.1;
+% L_mot_sim = 0.0000717;
+% V_in_sim = 3.5;
+
+fileName = 'doublePend';
+order = [2 1 4];
+Parameters = {c1_sim, l1_sim, b1_sim, m1_sim, J1_sim, c2_sim, g_sim, b2_sim, m2_sim, J2_sim, k_gear_sim, k_mot_sim, R_mot_sim, L_mot_sim};
+InitialStates = [theta_2(t == 0.773);0];
+Ts = 0;
+nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
+    'Name','Single Pendulum');
+
+nlgr.Parameters(5).Fixed = true;
+nlgr.Parameters(1).Minimum = 0;
+nlgr.Parameters(2).Minimum = 0;
+nlgr.Parameters(3).Minimum = 0;
+nlgr.Parameters(4).Minimum = 0;
+
+nlgr.Parameters(1).Maximum = 0.0004;
+nlgr.Parameters(2).Maximum = 0.12;
+nlgr.Parameters(3).Maximum = 1;
+nlgr.Parameters(4).Maximum = 0.1;
+
+nlgr = nlgreyest(z,nlgr);
+
+figure()
+compare(z,nlgr,Inf)
+
 
 %% Create LaTex version with derivatives
 rawStr = latex(qSol);
