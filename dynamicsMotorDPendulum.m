@@ -115,7 +115,7 @@ load data/sysID/sin2p2Hz
 theta_1 = medfilt1(unwrap(theta_1), 3);
 theta_2 = medfilt1(unwrap(theta_2), 3);
 
-data1 = iddata([theta_1(1:200), theta_2(1:200)], input(1:200)*15, t(5)-t(4));
+data1 = iddata([theta_1(1:10:100), theta_2(1:10:100)], input(1:10:100)*15, (t(5)-t(4))*10);
 
 figure(1)
 plot(t, theta_1, t, theta_2)
@@ -125,7 +125,7 @@ load data/sysID/fullRots
 theta_1 = medfilt1(unwrap(theta_1), 3);
 theta_2 = medfilt1(unwrap(theta_2), 3);
 
-data2 = iddata([theta_1, theta_2], input, t(5)-t(4));
+data2 = iddata([theta_1(1:10:400), theta_2(1:10:400)], input(1:10:400)*15, (t(5)-t(4))*10);
 
 figure(2)
 plot(t, theta_1, t, theta_2)
@@ -137,17 +137,17 @@ load data/constPar/model_parameters
 c1_sim = 0.040;
 l1_sim = 0.100;
 b1_sim = 0.0004;
-m1_sim = 0.4;
+m1_sim = 0.4; % from 0.4
 J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2);
 % c2_sim = 0.070;
 % g_sim = 9.81;
 % b2_sim = 0.00004;
 % m2_sim = 0.1;
 % J2_sim = 1/12*0.1^2*0.048;
-c2_sim = c2;
+c2_sim = c2*1;
 g_sim = g;
 b2_sim = b2;
-m2_sim = m2;
+m2_sim = m2*1;
 J2_sim = J2;
 
 
@@ -155,7 +155,7 @@ k_gear_sim = 33;
 k_mot_sim = 0.0385;
 R_mot_sim = 0.1;
 L_mot_sim = 0.0000717;
-V_in_sim = 3.5;
+V_in_sim = 3.5; % from 3.5
 
 % matlabFunction(qSol,'Vars',[theta1; dtheta1; theta2; dtheta2; dc_mot; V_in; c1; l1; b1; m1; J1; c2; g; b2; m2; J2; k_gear; k_mot; R_mot; L_mot],'File', 'DoublePendMotor')
 fileName = 'DoublePendMotor';
@@ -188,9 +188,9 @@ nlgr.Parameters(14).Minimum = 0;
 nlgr.Parameters(1).Maximum = 0.1;
 nlgr.Parameters(2).Maximum = 0.12;
 nlgr.Parameters(3).Maximum = 0.001;
-nlgr.Parameters(4).Maximum = 0.5;
+nlgr.Parameters(4).Maximum = 0.9;  % from 0.5
 nlgr.Parameters(5).Maximum = 0.0035;
-nlgr.Parameters(6).Maximum = 0.1;
+nlgr.Parameters(6).Maximum = 0.1*1.4;
 nlgr.Parameters(8).Maximum = 0.0004;
 nlgr.Parameters(9).Maximum = 0.12;
 nlgr.Parameters(10).Maximum = 0.01;
