@@ -51,5 +51,6 @@ theta_1 = angles_raw.Data(:, 1);
 theta_2 = angles_raw.Data(:, 2);
 
 input = Input.Data;
+inputDig = 0.4 * sin(1 * 2 * pi * t);
 
-save data/sysID/fullRots t theta_1 theta_2 input
+save data/sysID/chirp2 t theta_1 theta_2 input inputDig

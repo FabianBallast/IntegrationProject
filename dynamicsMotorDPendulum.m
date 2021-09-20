@@ -110,28 +110,55 @@ ind = 1:ind_step:length(t_sim);
 visualize_pendulum(t_sim(ind), sol_sim(1,ind)', sol_sim(3,ind)', par);
 
 %% Create data
-load data/sysID/fullRots
+load data/sysID/sin2p2Hz
 
-jump_thres = 0.03;
-
-jumps1 = [0; theta_1(2:end)-theta_1(1:end-1)];
-jumps1(abs(jumps1) < jump_thres) = 0;
-acc_err1 = cumsum(jumps1);
-
-jumps2 = [0; theta_2(2:end)-theta_2(1:end-1)];
-jumps2(abs(jumps2) < jump_thres) = 0;
-acc_err2 = cumsum(jumps2);
-
-theta_1 = medfilt1(unwrap(theta_1 - 1*acc_err1), 3);
-theta_2 = medfilt1(unwrap(theta_2 - 1*acc_err2), 3);
-
-data1 = iddata([theta_1(1:10:800), theta_2(1:10:800)], input(1:10:800)*0.7*12, (t(5)-t(4))*10);
+dt = t(5)-t(4);
 
 figure(1)
 plot(t, theta_1, t, theta_2)
 
-figure(2)
-plot(t, medfilt1(unwrap(theta_1 + acc_err1), 3), t, medfilt1(unwrap(theta_2 + acc_err2), 3))
+ind = 0:length(theta_1);
+jump_thres = 0.03;
+
+jumps1 = [0; theta_1(2:end)-theta_1(1:end-1)];
+jumps1(abs(jumps1) < jump_thres) = 0;
+jumps1_ind = ind(jumps1 ~= 0);
+
+
+for i = length(jumps1_ind):-1:2
+    if(jumps1_ind(i) - jumps1_ind(i-1) == 1)
+       theta_1( jumps1_ind(i) ) = [];
+       jumps1_ind(i) = [];
+    end
+end
+
+jumps1 = [0; theta_1(2:end)-theta_1(1:end-1)];
+jumps1(abs(jumps1) < jump_thres) = 0;
+jumps1_ind = ind(jumps1 ~= 0);
+
+der = zeros(length(jumps1_ind), 2);
+added_slots = zeros(length(jumps1_ind), 1);
+
+for i = 1:length(jumps1_ind)
+    der(i, 1) = (theta_1(jumps1_ind(i)) - theta_1(jumps1_ind(i)-5)) / (5*dt);
+    der(i, 2) = (theta_1(jumps1_ind(i)+6) - theta_1(jumps1_ind(i)+1)) / (5*dt);
+    der_avg = (der(i, 1) + der(i, 2)) / 2;
+    added_slots(i) = (theta_1(jumps1_ind(i)+1) - theta_1(jumps1_ind(i))) / (der_avg*dt);
+end
+
+
+
+jumps2 = [0; theta_2(2:end)-theta_2(1:end-1)];
+jumps2(abs(jumps2) < jump_thres) = 0;
+
+theta_1 = medfilt1(unwrap(theta_1), 3);
+theta_2 = medfilt1(unwrap(theta_2), 3);
+
+data1 = iddata([theta_1(1:10:800), theta_2(1:10:800)], input(1:10:800)*0.7*12, (t(5)-t(4))*10);
+
+
+% figure(2)
+% plot(t, theta_1, t, theta_2)
 
 
 
@@ -238,13 +265,13 @@ k_gear_sim = 33;
 k_mot_sim = 0.05;
 R_mot_sim = 0.2;
 L_mot_sim = 0.0000917;
-V_in_sim = -0.55*12; % from 3.5
-%*sin(time * 2 * pi* 2.2)
+V_in_sim = 0.7*12; % from 3.5
+%
 % matlabFunction(qSol,'Vars',[theta1; dtheta1; theta2; dtheta2; dc_mot; V_in; c1; l1; b1; m1; J1; c2; g; b2; m2; J2; k_gear; k_mot; R_mot; L_mot],'File', 'DoublePendMotor')
 % InitialStates = [data1.OutputData(1, 1);0;data1.OutputData(1, 2);0;0];
 InitialStates = [data1.OutputData(1, 1);0;data1.OutputData(1, 2);0;0];
 
-ODE = @(time,x) DoublePendMotor(0,x,V_in_sim,c1_sim,l1_sim,b1_sim,m1_sim,J1_sim,c2_sim,g_sim,b2_sim,m2_sim,J2_sim,k_gear_sim,k_mot_sim,R_mot_sim,L_mot_sim,0);
+ODE = @(time,x) DoublePendMotor(0,x,V_in_sim*sin(time * 2 * pi* 2.2),c1_sim,l1_sim,b1_sim,m1_sim,J1_sim,c2_sim,g_sim,b2_sim,m2_sim,J2_sim,k_gear_sim,k_mot_sim,R_mot_sim,L_mot_sim,0);
 t_sim = 0:0.0001:5;
 x = RK4(t_sim, InitialStates, ODE);
 
