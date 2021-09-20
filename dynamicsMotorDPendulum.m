@@ -110,25 +110,40 @@ ind = 1:ind_step:length(t_sim);
 visualize_pendulum(t_sim(ind), sol_sim(1,ind)', sol_sim(3,ind)', par);
 
 %% Create data
-load data/sysID/sin2p2Hz 
+load data/sysID/fullRots
 
-theta_1 = medfilt1(unwrap(theta_1), 3);
-theta_2 = medfilt1(unwrap(theta_2), 3);
+jump_thres = 0.03;
 
-data1 = iddata([theta_1(1:10:100), theta_2(1:10:100)], input(1:10:100)*15, (t(5)-t(4))*10);
+jumps1 = [0; theta_1(2:end)-theta_1(1:end-1)];
+jumps1(abs(jumps1) < jump_thres) = 0;
+acc_err1 = cumsum(jumps1);
+
+jumps2 = [0; theta_2(2:end)-theta_2(1:end-1)];
+jumps2(abs(jumps2) < jump_thres) = 0;
+acc_err2 = cumsum(jumps2);
+
+theta_1 = medfilt1(unwrap(theta_1 - 1*acc_err1), 3);
+theta_2 = medfilt1(unwrap(theta_2 - 1*acc_err2), 3);
+
+data1 = iddata([theta_1(1:10:800), theta_2(1:10:800)], input(1:10:800)*0.7*12, (t(5)-t(4))*10);
 
 figure(1)
 plot(t, theta_1, t, theta_2)
 
-load data/sysID/fullRots
-
-theta_1 = medfilt1(unwrap(theta_1), 3);
-theta_2 = medfilt1(unwrap(theta_2), 3);
-
-data2 = iddata([theta_1(1:10:400), theta_2(1:10:400)], input(1:10:400)*15, (t(5)-t(4))*10);
-
 figure(2)
-plot(t, theta_1, t, theta_2)
+plot(t, medfilt1(unwrap(theta_1 + acc_err1), 3), t, medfilt1(unwrap(theta_2 + acc_err2), 3))
+
+
+
+% load data/sysID/fullRots
+% 
+% theta_1 = medfilt1(unwrap(theta_1), 3);
+% theta_2 = medfilt1(unwrap(theta_2), 3);
+% 
+% data2 = iddata([theta_1(1:10:400), theta_2(1:10:400)], input(1:10:400)*15, (t(5)-t(4))*10);
+% 
+% figure(2)
+% plot(t, theta_1, t, theta_2)
 %%
 data_full = merge(data1, data2);
 
@@ -136,9 +151,9 @@ load data/constPar/model_parameters
 
 c1_sim = 0.040;
 l1_sim = 0.100;
-b1_sim = 0.0004;
-m1_sim = 0.4; % from 0.4
-J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2);
+b1_sim = 0.04;
+m1_sim = 0.5; % from 0.4
+J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2)*300;
 % c2_sim = 0.070;
 % g_sim = 9.81;
 % b2_sim = 0.00004;
@@ -166,12 +181,12 @@ Ts = 0;
 nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
     'Name','Double Pendulum Motor');
 
-nlgr.Parameters(6).Fixed = true;
+nlgr.Parameters(1).Fixed = true;
+nlgr.Parameters(2).Fixed = true;
+nlgr.Parameters(3).Fixed = true;
+nlgr.Parameters(4).Fixed = true;
+nlgr.Parameters(5).Fixed = true;
 nlgr.Parameters(7).Fixed = true;
-nlgr.Parameters(8).Fixed = true;
-nlgr.Parameters(9).Fixed = true;
-nlgr.Parameters(10).Fixed = true;
-nlgr.Parameters(11).Fixed = true;
 nlgr.Parameters(1).Minimum = 0;
 nlgr.Parameters(2).Minimum = 0.09;
 nlgr.Parameters(3).Minimum = 0;
@@ -187,9 +202,9 @@ nlgr.Parameters(14).Minimum = 0;
 
 nlgr.Parameters(1).Maximum = 0.1;
 nlgr.Parameters(2).Maximum = 0.12;
-nlgr.Parameters(3).Maximum = 0.001;
+nlgr.Parameters(3).Maximum = 0.1;
 nlgr.Parameters(4).Maximum = 0.9;  % from 0.5
-nlgr.Parameters(5).Maximum = 0.0035;
+nlgr.Parameters(5).Maximum = 0.35;
 nlgr.Parameters(6).Maximum = 0.1*1.4;
 nlgr.Parameters(8).Maximum = 0.0004;
 nlgr.Parameters(9).Maximum = 0.12;
@@ -198,13 +213,47 @@ nlgr.Parameters(12).Maximum = 0.4;
 nlgr.Parameters(13).Maximum = 1;
 nlgr.Parameters(14).Maximum = 0.000717;
 
-opt = nlgreyestOptions('Display', 'On','SearchMethod','fmincon');
+opt = nlgreyestOptions('Display', 'On');
 nlgr = nlgreyest(data1,nlgr, opt);
 
 figure(3)
 compare(data1,nlgr,Inf)
 
+%% Just texting variables
 
+load data/constPar/model_parameters
+
+c1_sim = 0.040;
+l1_sim = 0.100;
+b1_sim = 0.04;
+m1_sim = 0.5; 
+J1_sim = 1/12*m1_sim*(l1_sim^2 + 0.015^2)*300;
+c2_sim = c2*1;
+g_sim = g;
+b2_sim = b2*1;
+m2_sim = m2*1;
+J2_sim = J2*1;
+
+k_gear_sim = 33;
+k_mot_sim = 0.05;
+R_mot_sim = 0.2;
+L_mot_sim = 0.0000917;
+V_in_sim = -0.55*12; % from 3.5
+%*sin(time * 2 * pi* 2.2)
+% matlabFunction(qSol,'Vars',[theta1; dtheta1; theta2; dtheta2; dc_mot; V_in; c1; l1; b1; m1; J1; c2; g; b2; m2; J2; k_gear; k_mot; R_mot; L_mot],'File', 'DoublePendMotor')
+% InitialStates = [data1.OutputData(1, 1);0;data1.OutputData(1, 2);0;0];
+InitialStates = [data1.OutputData(1, 1);0;data1.OutputData(1, 2);0;0];
+
+ODE = @(time,x) DoublePendMotor(0,x,V_in_sim,c1_sim,l1_sim,b1_sim,m1_sim,J1_sim,c2_sim,g_sim,b2_sim,m2_sim,J2_sim,k_gear_sim,k_mot_sim,R_mot_sim,L_mot_sim,0);
+t_sim = 0:0.0001:5;
+x = RK4(t_sim, InitialStates, ODE);
+
+figure(3)
+plot(t_sim, x(1, :), t(1:5000), theta_1(1:5000)); hold on;
+plot(t_sim, x(3, :), t(1:5000), theta_2(1:5000)); hold off;
+% 
+% figure(4)
+% plot(t_sim,6*sin(t_sim* (2*pi)*2.2), t(1:5000), input(1:5000)); 
 %% Create LaTex version with derivatives
 rawStr = latex(qSol);
 latStr = strrep(rawStr, 'dtheta','\dot{\theta}');

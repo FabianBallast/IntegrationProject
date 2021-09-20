@@ -18,9 +18,9 @@ function [x] = RK4(t, x0, ODE)
     
     for i = 2:n
         k1 = ODE(t(i), x(:, i-1));
-        k2 = ODE(t(i) + dt/2, x(:, i-1) + dt*k1/2);
-        k3 = ODE(t(i) + dt/2, x(:, i-1) + dt*k2/2);
-        k4 = ODE(t(i)+dt, x(:, i-1) + dt*k3);
+        k2 = ODE(t(i)x(:, i-1) + dt*k1/2);
+        k3 = ODE(x(:, i-1) + dt*k2/2);
+        k4 = ODE(x(:, i-1) + dt*k3);
         x(:, i) = x(:, i-1) + 1/6 * dt * (k1 + 2* k2 + 2*k3 + k4);
     end
 end
