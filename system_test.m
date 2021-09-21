@@ -47,10 +47,10 @@ gain_2 = 2 * pi / (max_theta_2 - min_theta_2);
 
 %%
 t = angles_raw.Time;
-theta_1 = angles_raw.Data(:, 1);
-theta_2 = angles_raw.Data(:, 2);
+theta_1 = angles_raw.Data(500:end, 1);
+theta_2 = angles_raw.Data(500:end, 2);
 
-input = Input.Data;
-inputDig = InputDigital.Data;
+input = Input.Data(500:end);
+inputDig = InputDigital.Data(500:end);
 
-save data/sysID/sin5Hz0p2 t theta_1 theta_2 input inputDig
+save data/sysID/angle_limits t theta_1 theta_2 input inputDig
