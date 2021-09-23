@@ -3,7 +3,7 @@ clear all;
 sympref('MatrixWithSquareBrackets',true);
 %% Set up system of equations 
 syms theta2 dtheta2 ddtheta2 real;
-syms m2 J2 g c2 b real positive;
+syms m2 J2 g c2 b a1 a2 real positive;
 
 q = [theta2];
 dq = [dtheta2];
@@ -35,12 +35,15 @@ F = simplify(F, 5);
 qSol = M\F;
 
 %% Plot data
-load data/sysID/osc_th2
+load data/sysID/theta2swing
 
+t = t(554:end);
+theta_1 = theta_1(55:end);
+theta_2 = theta_2(55:end)-theta_1(1);
 plot(t, theta_2)
 %% Test simple integration
-t_sim = 0.773:0.0001:10;
-theta2_0 = -1.23;
+t_sim = t(1):0.001:t(end);
+theta2_0 = theta_2(1);
 dtheta2_0  = 0;
 
 sol_sim = zeros(2, length(t_sim));
@@ -68,29 +71,36 @@ for i = 2:length(t_sim)
 end
 
 figure(2)
-plot(t_sim, sol_sim(1, :), t(t >= 0.773), theta_2(t >= 0.773) );
+plot(t_sim, sol_sim(1, :), t, theta_2 );
 
 %% NLID
-z = iddata(theta_2(t >= 0.773),[],0.001,'Name','Single Pendulum');
+z = iddata(theta_2,[],0.01,'Name','Single Pendulum');
 
-fileName = 'singlePend';
+fileName = 'singlePend2';
 order = [1 0 2];
-Parameters = {b_sim; c2_sim; m2_sim; J2_sim; g_sim};
-InitialStates = [theta_2(t == 0.773);0];
+% Parameters = {b_sim*2; c2_sim; m2_sim*2; J2_sim*2; g_sim};
+Parameters = { b_sim/(m2_sim*c2_sim^2+J2_sim); c2_sim*g_sim*m2_sim/(m2_sim*c2_sim^2+J2_sim)};
+InitialStates = [theta_2(1);0];
 Ts = 0;
 nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
     'Name','Single Pendulum');
 
-nlgr.Parameters(5).Fixed = true;
+% nlgr.Parameters(5).Fixed = true;
+% nlgr.Parameters(1).Minimum = 0;
+% nlgr.Parameters(2).Minimum = 0;
+% nlgr.Parameters(3).Minimum = 0;
+% nlgr.Parameters(4).Minimum = 0;
+% 
+% nlgr.Parameters(1).Maximum = 0.0004;
+% nlgr.Parameters(2).Maximum = 0.12;
+% nlgr.Parameters(3).Maximum = 1;
+% nlgr.Parameters(4).Maximum = 0.1;
+
 nlgr.Parameters(1).Minimum = 0;
 nlgr.Parameters(2).Minimum = 0;
-nlgr.Parameters(3).Minimum = 0;
-nlgr.Parameters(4).Minimum = 0;
 
-nlgr.Parameters(1).Maximum = 0.0004;
-nlgr.Parameters(2).Maximum = 0.12;
-nlgr.Parameters(3).Maximum = 1;
-nlgr.Parameters(4).Maximum = 0.1;
+% nlgr.Parameters(1).Maximum = 0.0004;
+% nlgr.Parameters(2).Maximum = 0.12;
 
 opt = nlgreyestOptions('Display', 'On');
 nlgr = nlgreyest(z,nlgr,opt);
