@@ -54,7 +54,7 @@ g_sim = 9.81;
 b_sim = 0.00004;
 m2_sim = 0.1;
 J2_sim = 1/12*0.1^2*0.048; 
-
+%%
 % c2_sim = 0.0309;
 % g_sim = 9.81;
 % b_sim = 0.0001;
@@ -107,7 +107,10 @@ nlgr = nlgreyest(z,nlgr,opt);
 
 figure()
 compare(z,nlgr,Inf)
-
+%%
+figure()
+sys = pem(z,nlgr);
+compare(z,sys,Inf)
 %%
 par = getpvec(nlgr);
 b2 = par(1);

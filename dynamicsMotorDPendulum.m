@@ -110,7 +110,7 @@ ind = 1:ind_step:length(t_sim);
 visualize_pendulum(t_sim(ind), sol_sim(1,ind)', sol_sim(3,ind)', par);
 
 %% Create data
-load data/sysID/fullRots
+load data/sysID/sin2p2Hz
 
 jump_thres = 0.03;
 
