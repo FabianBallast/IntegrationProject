@@ -54,12 +54,30 @@ nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
 nlgr.Parameters(1).Minimum = 0;
 nlgr.Parameters(2).Minimum = 0;
 
+% nlgr.Parameters(1).Maximum = 0.4;
+% nlgr.Parameters(2).Maximum = 0.1;
+
 opt = nlgreyestOptions('Display', 'On');
 nlgr = nlgreyest(z,nlgr,opt);
-
+%%
 figure()
 compare(z,nlgr,Inf)
 %%
 sys = pem(z, nlgr);
 figure()
 compare(z,nlgr,Inf)
+
+%% Saving parameters
+load data/constPar/th2_temp_par
+par = getpvec(nlgr);
+
+m2_val = par(1);
+c2_val = par(2);
+
+g_val = 9.81;
+J2_val = c2_val*m2_val*g_val/a22 - m2_val*c2_val^2;
+b2_val = a21 * c2_val*m2_val*g_val / a22;
+l1_val = 0.097;
+
+save data/constPar/model_parameters m2_val g_val c2_val J2_val b2_val l1_val
+

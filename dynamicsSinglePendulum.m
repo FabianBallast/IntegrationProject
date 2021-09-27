@@ -113,10 +113,15 @@ sys = pem(z,nlgr);
 compare(z,sys,Inf)
 %%
 par = getpvec(nlgr);
-b2 = par(1);
-c2 = par(2);
-m2 = par(3);
-J2 = par(4);
-g = par(5);
+a21 = par(1);
+a22 = par(2);
 
-save data/constPar/model_parameters b2 c2 g m2 J2
+save data/constPar/th2_temp_par a21 a22
+
+% b2 = par(1);
+% c2 = par(2);
+% m2 = par(3);
+% J2 = par(4);
+% g = par(5);
+% 
+% save data/constPar/model_parameters b2 c2 g m2 J2
