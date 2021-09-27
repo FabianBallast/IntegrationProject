@@ -80,10 +80,10 @@ init_sys.Structure.Parameters(2).Maximum = 500;
 
 init_sys.Structure.Parameters(1).Minimum = 0;
 init_sys.Structure.Parameters(2).Minimum = 0;
-opt = greyestOptions('InitialState', 'zero', 'Focus', 'Simulation');
+opt = greyestOptions('InitialState', 'auto', 'Focus', 'Simulation');
 sys = greyest(data,init_sys, opt);
 %%
-opt = compareOptions('InitialCondition', 'zero');
+opt = compareOptions('InitialCondition', 'auto');
 figure(2);
 compare(data1,sys,Inf,opt)
 figure(3)
@@ -93,7 +93,7 @@ compare(data3,sys,Inf,opt)
 %%
 par = getpvec(sys);
 init_sys = idgrey('motorDyn',{'a11',par(1); 'a12', par(2)},'c');
-sys_pem = pem(data,init_sys);
+sys_pem = pem(data3,init_sys);
 
 %%
 figure(2);
