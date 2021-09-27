@@ -27,5 +27,5 @@ model_par.a22 = c2_val*g_val*m2_val/(m2_val*c2_val^2+J2_val);
 
 Theta1_0 = 0;
 Thetad1_0 = 0;
-Theta2_0 = 0.035;
+Theta2_0 = 0.033;
 Thetad2_0 = 0;
