@@ -2,11 +2,11 @@
 clear all;
 close all;
 %%
-load data/sysID/sweepv4;
+load data/sysID/chirpv5;
 
-t_ID = t(500:1301);
-Y_ID = theta_1(1:802);
-U_ID = input(2:803);
+t_ID = t(500:2501);
+Y_ID = theta_1(101:2102);
+U_ID = input(101:2102);
 
 Y_ID2 = preprocessing(Y_ID, Y_ID, t_ID);
 Y_ID2 = Y_ID2-Y_ID(1);
@@ -16,11 +16,11 @@ plot(t_ID, Y_ID2)
 
 data1 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Sweep');
 %%
-load data/sysID/sin1Hz0p5v1;
+load data/sysID/sin3Hz;
 
-t_ID = t(700:1301);
-Y_ID = theta_1(201:802);
-U_ID = input(202:803);
+t_ID = t(500:2001);
+Y_ID = theta_1(101:1602);
+U_ID = input(101:1602);
 
 Y_ID2 = preprocessing(Y_ID, Y_ID, t_ID);
 Y_ID2 = Y_ID2-Y_ID(1);
@@ -29,19 +29,30 @@ plot(t_ID, Y_ID2)
 
 data2 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Sine');
 %%
-load data/sysID/rot_inc_torqv1;
+load data/sysID/const0p4;
 
-t_ID = t(700:1301);
-Y_ID = theta_1(201:802);
-U_ID = input(202:803);
-
-
+t_ID = t(500:2001);
+Y_ID = theta_1(101:1602);
+U_ID = input(101:1602);
 
 Y_ID2 = preprocessing(Y_ID, Y_ID, t_ID);
 Y_ID2 = Y_ID2-Y_ID(1);
 figure(1);
 plot(t_ID, Y_ID2)
-data3 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Torque');
+data3 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Const forward');
+
+%%
+load data/sysID/constmin0p8;
+
+t_ID = t(500:2001);
+Y_ID = theta_1(101:1602);
+U_ID = input(101:1602);
+
+Y_ID2 = preprocessing(Y_ID, Y_ID, t_ID);
+Y_ID2 = Y_ID2-Y_ID(1);
+figure(1);
+plot(t_ID, Y_ID2)
+data4 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Const back');
 
 %%
 
@@ -80,20 +91,22 @@ init_sys.Structure.Parameters(2).Maximum = 500;
 
 init_sys.Structure.Parameters(1).Minimum = 0;
 init_sys.Structure.Parameters(2).Minimum = 0;
-opt = greyestOptions('InitialState', 'auto', 'Focus', 'Simulation');
+opt = greyestOptions('InitialState', 'zero', 'Focus', 'Simulation');
 sys = greyest(data,init_sys, opt);
 %%
-opt = compareOptions('InitialCondition', 'auto');
+opt = compareOptions('InitialCondition', 'zero');
 figure(2);
 compare(data1,sys,Inf,opt)
 figure(3)
 compare(data2,sys,Inf,opt)
 figure(4)
 compare(data3,sys,Inf,opt)
+figure(5)
+compare(data4,sys,Inf,opt)
 %%
 par = getpvec(sys);
 init_sys = idgrey('motorDyn',{'a11',par(1); 'a12', par(2)},'c');
-sys_pem = pem(data3,init_sys);
+sys_pem = pem(data,init_sys);
 
 %%
 figure(2);

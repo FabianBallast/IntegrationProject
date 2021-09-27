@@ -14,7 +14,7 @@ M22 = m2*c2^2 + J2;
 ddtheta2 = F/M22 - M21/M22 * (-a11*dtheta1 - a12*V_in);
 
 %% Linearize
-linState = [pi;0;0;0];
+linState = [0;0;0;0];
 
 jac_q = jacobian(ddtheta2, [theta1, dtheta1, theta2, dtheta2, V_in]);
 jac_q_val = subs(jac_q, [c2 m2 g J2 b2 l1 theta1 dtheta1 theta2 dtheta2 V_in], ...
