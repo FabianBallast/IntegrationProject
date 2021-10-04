@@ -4,10 +4,11 @@ load data/constPar/lin_model_dt
 %% Create cost matrices
 % Order of states: th1 thd1 th2 thd2
 % Qd = 1*diag([40 3 100 3]);
-Qd = 1*diag([120 10 150 10]);
-Rd = 0.5;
+% Qd = 1*diag([120 10 150 10]);
+Qd = 1*diag([100 0.0001 150 0.0001]);
+Rd = 13;
 
-Kd = dlqr(sysd.A, sysd.B, Qd, Rd);
+Kd = dlqr(sysd.A, sysd.B, Qd, Rd)
 
 save data/constPar/LQR_gain_d
 
@@ -28,7 +29,7 @@ model_par.a22 = c2_val*g_val*m2_val/(m2_val*c2_val^2+J2_val);
 
 Theta1_0 = 0;
 Thetad1_0 = 0;
-Theta2_0 = 0.04;
+Theta2_0 = 0.01;
 Thetad2_0 = 0;
 
 h = 0.01;
