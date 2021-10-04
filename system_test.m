@@ -47,10 +47,10 @@ gain_2 = 2 * pi / (max_theta_2 - min_theta_2);
 
 %%
 t = angles_raw.Time;
-theta_1 = angles_raw.Data(400:end, 1);
-theta_2 = angles_raw.Data(400:end, 2);
+theta_1 = angles_raw.Data(1:end, 1);
+theta_2 = angles_raw.Data(1:end, 2);
 
-input = Input.Data(400:end);
-inputDig = InputDigital.Data(400:end);
+input = Input.Data(1:end);
+inputDig = InputDigital.Data(1:end);
 
-save data/sysID/constmin0p8 t theta_1 theta_2 input inputDig
+save data/sysID/closedLoopLQR1 t theta_1 theta_2 input inputDig
