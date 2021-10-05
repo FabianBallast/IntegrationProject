@@ -4,9 +4,11 @@ load data/constPar/lin_model_dt
 %% Create cost matrices
 % Order of states: th1 thd1 th2 thd2
 % Qd = 1*diag([40 3 100 3]);
-% Qd = 1*diag([120 10 150 10]);
-Qd = 1*diag([100 0.0001 150 0.0001]);
-Rd = 13;
+% Qd = 1*diag([120 10 150 10]); Rd = 50;
+% Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 25;
+% Qd = 1*diag([100 0.0001 150 0.01]);
+Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 200;
+% Rd = 1;
 
 Kd = dlqr(sysd.A, sysd.B, Qd, Rd)
 

@@ -53,4 +53,4 @@ theta_2 = angles_raw.Data(1:end, 2);
 input = Input.Data(1:end);
 inputDig = InputDigital.Data(1:end);
 
-save data/sysID/noise t theta_1 theta_2 input inputDig
+save data/sysID/chirp_deadzone t theta_1 theta_2 input inputDig
