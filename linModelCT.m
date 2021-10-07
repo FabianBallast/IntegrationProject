@@ -1,7 +1,7 @@
 %% Load all parameters
 
 load data/constPar/model_parameters
-load data/constPar/motorPar
+load data/constPar/motorPar2
 
 %% Make dynamical model again
 syms theta1 dtheta1 ddtheta1 theta2 dtheta2 ddtheta2 c_mot dc_mot ddc_mot real;

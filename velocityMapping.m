@@ -89,3 +89,31 @@ v2 = smooth(diff(y_s2)/0.05, 7);
 figure(2);
 plot(input1(2:5:end), v1, 'o', 'Markersize', 1); hold on;
 plot(input2(2:5:end), v2, 'o', 'Markersize', 1); hold off;
+%%
+load data/sysID/velMap1Imp
+input1 = inputDig(11:end);
+theta1 = theta_1;
+t1 = t;
+
+load data/sysID/velMap2Imp
+input2 = inputDig(11:end);
+theta2 = theta_1;
+t2 = t;
+
+theta1 = preprocessing(theta1, theta1, t1);
+theta2 = preprocessing(theta2, theta2, t2);
+
+figure(1);
+plot(t1, theta1); hold on;
+plot(t2, theta2); hold off;
+
+%%
+y_s1 = smooth(theta1(1:5:end));
+y_s2 = smooth(theta2(1:5:end));
+
+v1 = smooth(diff(y_s1)/0.05, 7);
+v2 = smooth(diff(y_s2)/0.05, 7);
+
+figure(3);
+plot(input1(2:5:end), v1, 'o', 'Markersize', 1); hold on;
+plot(input2(2:5:end), v2, 'o', 'Markersize', 1); hold off;
