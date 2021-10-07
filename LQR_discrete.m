@@ -7,7 +7,10 @@ load data/constPar/lin_model_dt
 % Qd = 1*diag([120 10 150 10]); Rd = 50;
 % Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 25;
 % Qd = 1*diag([100 0.0001 150 0.01]);
-Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 200;
+% Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 200;
+
+Qd = 1*diag([150 0.0001 150 0.0001]); Rd = 100;
+
 % Rd = 1;
 
 Kd = dlqr(sysd.A, sysd.B, Qd, Rd)
