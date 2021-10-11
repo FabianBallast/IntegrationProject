@@ -9,7 +9,7 @@ load data/constPar/lin_model_dt
 % Qd = 1*diag([100 0.0001 150 0.01]);
 % Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 200;
 
-Qd = 1*diag([150 0.0001 150 0.0001]); Rd = 100;
+Qd = 1*diag([150 0.0001 150 0.0001]); Rd = 100; % 75 for better tracking, 100 for smooth movement
 
 % Rd = 1;
 
@@ -49,7 +49,7 @@ Ld = place(sysd.A',sysd.C',obs_poles_d).';
 
 load data/sysID/noise
 
-Q = 0.000001;
+Q = 0.0000018;
 R = cov(theta_1, theta_2);
 
 [kalmf,Ld,~,Mx,Z] = kalman(sysd, Q, R);

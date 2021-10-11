@@ -53,4 +53,6 @@ theta_2 = angles_raw.Data(1:end, 2);
 input = Input.Data(1:end);
 inputDig = InputDigital.Data(1:end);
 
-save data/results/LQR_sinetrack_30deg_fast_071014 t theta_1 theta_2 input inputDig
+obs = observer.Data(1:end, :);
+
+save data/results/obs_1 t theta_1 theta_2 input inputDig obs
