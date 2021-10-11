@@ -15,10 +15,10 @@ bodemag(systf,'b',systf.NominalValue,'r+',logspace(-1,3,120))
 %%
 % ReferenceTarget1 = 0.004*tf([1], [1 -1.6 0.64], 0.01);
 % ReferenceTarget2 = 0.001*tf([1], [1 -1.8 0.81], 0.01);
-ReferenceTarget1 = 0.2*tf([1 0.01], [1 -0.8], 0.01);
-ReferenceTarget2 = 0.0*tf([1 0.01], [1 -0.9], 0.01);
+ReferenceTarget1 = 1*tf([1.1 -1.101], [1 -0.8187], 0.01);
+ReferenceTarget2 = 0.01*tf([1 0.01], [1 -0.9], 0.01);
 Wref1 = 1/ReferenceTarget1;
-Wref2 = 1*ReferenceTarget2;
+Wref2 = 1/ReferenceTarget2;
 % Wref1 = tf(1/0.01);
 % Wref2 = tf(0/10);
 Wref1.u = 'off1';  Wref1.y = 'e1';
@@ -35,8 +35,8 @@ th2meas = sumblk('y2 = theta_2');
 off1meas  = sumblk('off1 = r_theta1 - theta_1');
 off2meas = sumblk('off2 = -r_theta1 - theta_2');
 ICinputs = {'r_theta1';'u'};
-ICoutputs = {'e1';'e2'; 'off1'}; %; 'off2'};
-qcaric = connect(sysd,Wref1, Wref2, off1meas, off2meas,...
+ICoutputs = {'e1'; 'off1'}; %; 'off2'};
+qcaric = connect(sysd,Wref1, off1meas, off2meas,...
                  th1meas,th2meas,ICinputs,ICoutputs)
              
 %%
@@ -46,7 +46,7 @@ gamma
 K.InputName = {'off1'}; %, 'off2'};
 K.OutputName = 'u';
 
-sys_cl = connect(qcaric, K, 'r_theta1', {'e1','e2', 'u', 'off1'});%, 'off2'});
+sys_cl = connect(qcaric, K, 'r_theta1', {'e1', 'u', 'off1'});%, 'off2'});
 
 %%
 opt = stepDataOptions('StepAmplitude',0.1);
