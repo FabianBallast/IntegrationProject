@@ -47,6 +47,9 @@ K.OutputName = 'u';
 sys_cl = connect(qcaric, K, 'r_theta1', {'z1', 'z2', 'z3', 'u', 'off1', 'off2'});
 
 %%
+save data/controller/hinf_controller K sys_cl
+
+%%
 opt = stepDataOptions('StepAmplitude',1);
 step(sys_cl, 1, opt)
 
