@@ -19,7 +19,7 @@ save data/constPar/LQR_gain_d
 
 %% Make ready for simulation
 load data/constPar/model_parameters
-load data/constPar/motorPar
+load data/constPar/motorPar2
 
 model_par.c2 = c2_val;
 model_par.b2 = b2_val;
