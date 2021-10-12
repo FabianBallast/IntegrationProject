@@ -10,8 +10,8 @@ sys = ss(A,B,C,D);
 sys.InputName='u';
 sys.OutputName={'theta_1', 'theta_2'};
 %%
-ReferenceTarget1 = 1.1*tf([1 0.002], [1 20]);
-ReferenceTarget2 = 1.1*tf([1 0.004], [1 40]);
+ReferenceTarget1 = 1.5*tf([1 0.001], [1 0.5]);
+ReferenceTarget2 = 1.2*tf([1 0.01], [1 10]);
 ReferenceCost = 0.005*tf([1 100000], [1,100]);
 
 Wref1 = 1/ReferenceTarget1;
