@@ -105,8 +105,13 @@ nlgr.Parameters(2).Minimum = 0;
 opt = nlgreyestOptions('Display', 'On');
 nlgr = nlgreyest(z,nlgr,opt);
 
+%%
 figure()
 compare(z,nlgr,Inf)
+ylabel('Angle (rad)')
+legend('Measured data', 'Identified model')
+saveas(gcf,'images/sysID_theta2','epsc')
+
 %%
 figure()
 sys = pem(z,nlgr);

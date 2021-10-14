@@ -50,6 +50,11 @@ data4 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Chirp');
 
 figure(2);
 plot(t_ID, U_ID)
+xlabel('Time (seconds)')
+ylabel('Input value (-)')
+title('Chirp input signal')
+saveas(gcf,'images/sysID_chirp','epsc')
+
 
 %%
 % load data/constPar/motorPar
