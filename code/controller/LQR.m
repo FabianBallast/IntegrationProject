@@ -1,5 +1,5 @@
 %% Load linear model
-load data/constPar/lin_model_ct
+load ../../data/constPar/lin_model_ct
 
 %% Create cost matrices
 % Order of states: th1 thd1 th2 thd2
@@ -8,11 +8,11 @@ R = 1;
 
 K = lqr(A, B, Q, R);
 
-save data/constPar/LQR_gain
+save ../../data/constPar/LQR_gain
 
 %% Make ready for simulation
-load data/constPar/model_parameters
-load data/constPar/motorPar
+load ../../data/constPar/model_parameters
+load ../../data/constPar/motorPar
 
 model_par.c2 = c2_val;
 model_par.b2 = b2_val;

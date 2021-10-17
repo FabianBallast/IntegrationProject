@@ -1,5 +1,5 @@
 %% Load linear model
-load data/constPar/lin_model_dt
+load ../../data/constPar/lin_model_dt
 
 %% Create cost matrices
 % Order of states: th1 thd1 th2 thd2
@@ -9,17 +9,17 @@ load data/constPar/lin_model_dt
 % Qd = 1*diag([100 0.0001 150 0.01]);
 % Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 200;
 
-Qd = 1*diag([150 0.0001 150 0.0001]); Rd = 100; % 75 for better tracking, 100 for smooth movement
+Qd = 1*diag([150 0.0001 150 0.0001]); Rd = 75; % 75 for better tracking, 100 for smooth movement
 
 % Rd = 1;
 
 Kd = dlqr(sysd.A, sysd.B, Qd, Rd)
 
-save data/constPar/LQR_gain_d
+save ../../data/constPar/LQR_gain_d Kd sysd Qd Rd
 
 %% Make ready for simulation
-load data/constPar/model_parameters
-load data/constPar/motorPar2
+load ../../data/constPar/model_parameters
+load ../../data/constPar/motorPar2
 
 model_par.c2 = c2_val;
 model_par.b2 = b2_val;
@@ -47,11 +47,10 @@ Ld = place(sysd.A',sysd.C',obs_poles_d).';
 
 %% Kalman filter
 
-load data/sysID/noise
+load ../../data/sysID/noise
 
 Q = 0.0000018;
 R = cov(theta_1, theta_2);
-
 [kalmf,Ld,~,Mx,Z] = kalman(sysd, Q, R);
 
 

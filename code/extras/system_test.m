@@ -55,4 +55,4 @@ inputDig = InputDigital.Data(1:end);
 
 obs = observer.Data(1:end, :);
 
-save data/results/obs_1 t theta_1 theta_2 input inputDig obs
+save ../../data/results/obs_1 t theta_1 theta_2 input inputDig obs

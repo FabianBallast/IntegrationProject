@@ -2,7 +2,7 @@
 clear all;
 close all;
 %%
-load data/sysID/sawtooth1;
+load ../../data/sysID/sawtooth1;
 
 t_ID = t(1:952);
 Y_ID = theta_1(1:952);
@@ -35,7 +35,7 @@ plot(t_ID, U_ID);
 data1 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Sawtooth');
 
 %%
-load data/sysID/chirp_deadzone;
+load ../../data/sysID/chirp_deadzone;
 
 t_ID = t(1:1001);
 Y_ID = theta_1(1:1001);
@@ -50,6 +50,11 @@ data4 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Chirp');
 
 figure(2);
 plot(t_ID, U_ID)
+xlabel('Time (seconds)')
+ylabel('Input value (-)')
+title('Chirp input signal')
+saveas(gcf,'sysID_chirp','epsc')
+
 
 %%
 % load data/constPar/motorPar
@@ -58,11 +63,11 @@ plot(t_ID, U_ID)
 % omega = 2.3 * 2 * pi; 
 
 
-[A, B, C, D] = motorDyn(-a11,-a12,0);
-lsys = ss(A,B,C,D);
-y = lsim(lsys, U_ID, t_ID, [0;0]); 
-plot(t_ID, Y_ID2); hold on;
-plot(t_ID, y); hold off;
+% [A, B, C, D] = motorDyn(-a11,-a12,0);
+% lsys = ss(A,B,C,D);
+% y = lsim(lsys, U_ID, t_ID, [0;0]); 
+% plot(t_ID, Y_ID2); hold on;
+% plot(t_ID, y); hold off;
 
 %%
 
@@ -92,10 +97,10 @@ opt = compareOptions('InitialCondition', 'zero');
 figure(2);
 compare(data1,sys, Inf, opt)
 %%
-figure(3)
-compare(data2,sys,Inf,opt)
-figure(4)
-compare(data3,sys,Inf,opt)
+% figure(3)
+% compare(data2,sys,Inf,opt)
+% figure(4)
+% compare(data3,sys,Inf,opt)
 figure(5)
 compare(data4,sys,Inf,opt)
 %%
@@ -108,19 +113,19 @@ figure(2);
 compare(data1,sys_pem,Inf,opt)
 
 %%
-figure(3)
-compare(data2,sys_pem,Inf,opt)
-figure(4)
-compare(data3,sys_pem,Inf,opt)
+% figure(3)
+% compare(data2,sys_pem,Inf,opt)
+% figure(4)
+% compare(data3,sys_pem,Inf,opt)
 
 %%
-opt = n4sidOptions('Focus','simulation');
-init_sys = n4sid(data,2);
-sys = pem(data,init_sys);
-figure(2)
-compare(data1,sys,init_sys);
+% opt = n4sidOptions('Focus','simulation');
+% init_sys = n4sid(data,2);
+% sys = pem(data,init_sys);
+% figure(2)
+% compare(data1,sys,init_sys);
 %%
-figure(3)
-compare(data2,sys,init_sys);
-figure(4)
-compare(data3,sys,init_sys);
+% figure(3)
+% compare(data2,sys,init_sys);
+% figure(4)
+% compare(data3,sys,init_sys);

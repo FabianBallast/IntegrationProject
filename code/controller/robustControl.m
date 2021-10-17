@@ -1,5 +1,5 @@
 %% load model
-load data/constPar/lin_model_dt
+load ../../data/constPar/lin_model_dt
 
 %% Set up uncertainty
 systf_nom = tf(sysd);
