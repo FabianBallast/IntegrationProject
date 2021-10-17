@@ -1,9 +1,12 @@
 % load data/controller/hinf_controller
-load data/controller/musyn_controller
+load ../../data/controller/musyn_controller
 
 hinf_dt = c2d(K, h);
 
 %% For the simulation with the model
+
+load ../../data/constPar/model_parameters
+load ../../data/constPar/motorPar2
 
 model_par.c2 = c2_val;
 model_par.b2 = b2_val;

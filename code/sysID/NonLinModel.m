@@ -1,7 +1,7 @@
 %% Load all parameters
 
-load data/constPar/model_parameters
-load data/constPar/motorPar
+load ../../data/constPar/model_parameters
+load ../../data/constPar/motorPar
 
 %% Make dynamical model again
 syms theta1 dtheta1 ddtheta1 theta2 dtheta2 ddtheta2 c_mot dc_mot ddc_mot real;
@@ -14,6 +14,8 @@ M22 = m2*c2^2 + J2;
 ddtheta2 = F/M22 - M21/M22 * (-a11*dtheta1 - a12*V_in);
 
 ddtheta2 = subs(ddtheta2, [g m2 l1 c2 b2 J2], [g_val m2_val l1_val c2_val b2_val J2_val]);
+
+h = 0.01;
 
 f_nonlin_ct = [ dtheta1;
                 -a11*dtheta1-a12*V_in;

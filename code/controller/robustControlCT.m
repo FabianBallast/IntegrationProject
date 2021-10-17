@@ -1,5 +1,5 @@
 %% load model
-load data/constPar/lin_model_ct
+load ../../data/constPar/lin_model_ct
 
 % A= A(1:2, 1:2);
 % B = B(1:2);
@@ -56,24 +56,26 @@ ICinputs = {'r_theta1';'u'};
 ICoutputs = {'z1';'z2';'z3';'off1'; 'off2'};
 qpend_nom = connect(sys_nom,Wref1,Wref2, Wcost, off1,off2,ICinputs,ICoutputs);
 qpend_rob = connect(sys_rob,Wref1,Wref2, Wcost, off1,off2,ICinputs,ICoutputs);
-%%
-[K,~,gamma] = hinfsyn(qpend_nom,2,1);
-gamma
-
-K.InputName = {'off1', 'off2'};
-K.OutputName = 'u';
-
-sys_cl = connect(qcaric, K, 'r_theta1', {'z1', 'z2', 'z3', 'u', 'off1', 'off2'});
 
 %%
-save data/controller/hinf_controller K sys_cl
+% [K,~,gamma] = hinfsyn(qpend_nom,2,1);
+% gamma
+% 
+% K.InputName = {'off1', 'off2'};
+% K.OutputName = 'u';
+% 
+% sys_cl = connect(qcaric, K, 'r_theta1', {'z1', 'z2', 'z3', 'u', 'off1', 'off2'});
+% 
+% %%
+% save ../../data/controller/hinf_controller K sys_cl
+% 
+% %%
+% opt = stepDataOptions('StepAmplitude',1);
+% step(sys_cl, 1, opt)
+% 
+% %%
+% bodemag(sys_cl)
 
-%%
-opt = stepDataOptions('StepAmplitude',1);
-step(sys_cl, 1, opt)
-
-%%
-bodemag(sys_cl)
 %% 
 [K,muPerf] = musyn(qpend_rob,2,1);
 muPerf
@@ -83,6 +85,7 @@ K.y = 'u';
 ICinputs = {'r_theta1'};
 ICoutputs = {'off1'; 'off2'; 'u'};
 sys_cl = connect(qpend_nom,K,ICinputs,ICoutputs);
+opt = stepDataOptions('StepAmplitude',1);
 step(sys_cl, 1, opt)
 
 %%
@@ -91,4 +94,4 @@ bplot = bodeplot(sys_cl, [ReferenceTarget1; ReferenceTarget2; ReferenceCost]);
 setoptions(bplot,'FreqUnits','Hz','PhaseVisible','off');
 
 %%
-save data/controller/musyn_controller K sys_cl
+save ../../data/controller/musyn_controller K sys_cl

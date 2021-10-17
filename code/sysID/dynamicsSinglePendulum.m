@@ -35,7 +35,7 @@ F = simplify(F, 5);
 qSol = M\F;
 
 %% Plot data
-load data/sysID/theta2swing
+load ../../data/sysID/theta2swing
 
 t = t(554:end);
 theta_1 = theta_1(55:end);
@@ -110,7 +110,7 @@ figure()
 compare(z,nlgr,Inf)
 ylabel('Angle (rad)')
 legend('Measured data', 'Identified model')
-saveas(gcf,'images/sysID_theta2','epsc')
+saveas(gcf,'sysID_theta2','epsc')
 
 %%
 figure()
@@ -121,7 +121,7 @@ par = getpvec(nlgr);
 a21 = par(1);
 a22 = par(2);
 
-save data/constPar/th2_temp_par a21 a22
+save ../../data/constPar/th2_temp_par a21 a22
 
 % b2 = par(1);
 % c2 = par(2);
