@@ -1,4 +1,4 @@
-load data/sysID/rot_inc_torqv1.mat
+load ../../data/sysID/rot_inc_torqv1.mat
 
 t = t(1:1002);
 input = input(4:end);
@@ -28,7 +28,7 @@ plot(t,polyval(pv, t)); hold off;
 v1 = v; %polyval(pv, t);
 %%
 
-load data/sysID/rot_inc_torq_negv1.mat
+load ../../data/sysID/rot_inc_torq_negv1.mat
 
 t = t(1:1002);
 input = input(4:end);
@@ -62,12 +62,12 @@ plot(-input(3:5:end), v1); hold on;
 plot(input(3:5:end), v2);hold off;
 
 %% 
-load data/sysID/velMap1
+load ../../data/sysID/velMap1
 input1 = inputDig(2:end);
 theta1 = theta_1;
 t1 = t;
 
-load data/sysID/velMap2
+load ../../data/sysID/velMap2
 input2 = inputDig(2:end);
 theta2 = theta_1;
 t2 = t;
@@ -90,12 +90,12 @@ figure(2);
 plot(input1(2:5:end), v1, 'o', 'Markersize', 1); hold on;
 plot(input2(2:5:end), v2, 'o', 'Markersize', 1); hold off;
 %%
-load data/sysID/velMap1Imp
+load ../../data/sysID/velMap1Imp
 input1 = inputDig(11:end);
 theta1 = theta_1;
 t1 = t;
 
-load data/sysID/velMap2Imp
+load ../../data/sysID/velMap2Imp
 input2 = inputDig(11:end);
 theta2 = theta_1;
 t2 = t;

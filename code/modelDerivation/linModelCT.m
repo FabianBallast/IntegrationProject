@@ -1,7 +1,7 @@
 %% Load all parameters
 
-load data/constPar/model_parameters
-load data/constPar/motorPar2
+load ../../data/constPar/model_parameters
+load ../../data/constPar/motorPar2
 
 %% Make dynamical model again
 syms theta1 dtheta1 ddtheta1 theta2 dtheta2 ddtheta2 c_mot dc_mot ddc_mot real;
@@ -39,4 +39,4 @@ C = [1,0,0,0;
 D = [0;0];
 
 %% Save matrices
-save data/constPar/lin_model_ct A B C D
+save ../../data/constPar/lin_model_ct A B C D

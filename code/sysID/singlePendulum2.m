@@ -1,5 +1,5 @@
 %%
-load data/sysID/sweepv4;
+load ../../data/sysID/sweepv4;
 
 t_ID = t(500:1001);
 Y_ID = theta_1(1:502);
@@ -68,7 +68,7 @@ figure()
 compare(z,nlgr,Inf)
 
 %% Saving parameters
-load data/constPar/th2_temp_par
+load ../../data/constPar/th2_temp_par
 par = getpvec(nlgr);
 
 m2_val = par(1);
@@ -79,5 +79,5 @@ J2_val = c2_val*m2_val*g_val/a22 - m2_val*c2_val^2;
 b2_val = a21 * c2_val*m2_val*g_val / a22;
 l1_val = 0.097;
 
-save data/constPar/model_parameters m2_val g_val c2_val J2_val b2_val l1_val
+save ../../data/constPar/model_parameters m2_val g_val c2_val J2_val b2_val l1_val
 

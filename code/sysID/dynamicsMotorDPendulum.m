@@ -88,7 +88,7 @@ acc_sol = [dtheta1; acc_sol(1); dtheta2; acc_sol(2); acc_sol(3)];
 acc = matlabFunction(acc_sol,'Vars',[theta1; dtheta1; theta2; dtheta2; dc_mot]);
 
 % acc2 = @(th1, dth1, th2, dth2) acc()
-ODE = @(x) acc(x(1), x(2), x(3), x(4), x(5));
+ODE = @(t,x) acc(x(1), x(2), x(3), x(4), x(5));
 sol_sim = RK4(t_sim, x0, ODE);
 
 figure(2)
@@ -110,7 +110,7 @@ ind = 1:ind_step:length(t_sim);
 visualize_pendulum(t_sim(ind), sol_sim(1,ind)', sol_sim(3,ind)', par);
 
 %% Create data
-load data/sysID/sin2p2Hz
+load ../../data/sysID/sin2p2Hz
 
 jump_thres = 0.03;
 
@@ -147,7 +147,7 @@ plot(t, medfilt1(unwrap(theta_1 + acc_err1), 3), t, medfilt1(unwrap(theta_2 + ac
 %%
 data_full = merge(data1, data2);
 
-load data/constPar/model_parameters
+load ../../data/constPar/model_parameters
 
 c1_sim = 0.040;
 l1_sim = 0.100;
@@ -221,7 +221,7 @@ compare(data1,nlgr,Inf)
 
 %% Just texting variables
 
-load data/constPar/model_parameters
+load ../../data/constPar/model_parameters
 
 c1_sim = 0.040;
 l1_sim = 0.100;
