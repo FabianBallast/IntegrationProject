@@ -15,7 +15,7 @@ Qd = 1*diag([150 0.0001 150 0.0001]); Rd = 75; % 75 for better tracking, 100 for
 
 Kd = dlqr(sysd.A, sysd.B, Qd, Rd)
 
-save ../../data/constPar/LQR_gain_d
+save ../../data/constPar/LQR_gain_d Kd sysd Qd Rd
 
 %% Make ready for simulation
 load ../../data/constPar/model_parameters
