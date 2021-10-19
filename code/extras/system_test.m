@@ -53,6 +53,6 @@ theta_2 = angles_raw.Data(1:end, 2);
 input = Input.Data(1:end);
 inputDig = InputDigital.Data(1:end);
 
-obs = observer.Data(1:end, :);
+% obs = observer.Data(1:end, :);
 
-save ../../data/results/obs_1 t theta_1 theta_2 input inputDig obs
+save ../../data/sysID/square2Hz0p7 t theta_1 theta_2 input inputDig
