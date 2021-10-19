@@ -67,7 +67,7 @@ u = [zeros(400, 1); u];
 plot(t, u);
 
 ref.time = t.';
-ref.signals.values = smooth(u.', 200);
+ref.signals.values = smooth(u.', 100);
 %% Run simulations
 
 for i = 1:length(K(:, 1))
