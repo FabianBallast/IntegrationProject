@@ -10,7 +10,7 @@ load ../../data/constPar/lin_model_dt
 % Qd = 1*diag([100 0.0001 150 0.0001]); Rd = 200;
 % Qd = diag([100, 0.1, 100, 0.1]); R1 = 1;
 
-Qd = diag([100, 0.1, 100, 0.1]); Rd = 35;
+Qd = diag([100, 0.1, 100, 0.1]); Rd = 20;
 
 % Qd = diag([200, 0.01, 200, 0.01]); Rd = 1;
 % Qd = 1*diag([150 0.01 150 0.01]); Rd = 75; % 75 for better tracking, 100 for smooth movement
@@ -33,7 +33,7 @@ R = cov(theta_1, theta_2);
 
 
 %%
-save ../data/results/K9_dist angles_raw Qd Rd
+save ../data/results/obs_LQR angles_raw Qd Rd observer
 
 
 %% Reference
