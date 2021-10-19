@@ -54,15 +54,15 @@ K3 = dlqr(sysd.A, sysd.B, Q3, R3);
 K = [K1; K2; K3];
 
 %% Reference
-t = 0:0.01:57;
+t = 0:0.01:27;
 
 % Step (trapezoidal) wave
-% u = smooth(square(t*2*pi / 20), 100);
+u = smooth(square(t*2*pi / 20), 100);
 
 % Sin wave
-u = sin(t*2*pi / 10).';
+% u = sin(t*2*pi / 10).';
 
-t = 0:0.01:60;
+t = 0:0.01:30;
 u = [zeros(300, 1); u];
 plot(t, u);
 
