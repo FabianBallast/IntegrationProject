@@ -40,7 +40,14 @@ load ../../data/sysID/theta2swing
 t = t(554:end);
 theta_1 = theta_1(55:end);
 theta_2 = theta_2(55:end)-theta_1(1);
+
+figure()
 plot(t, theta_2)
+ylabel('\theta_2 (radians)')
+xlabel('Time (seconds)')
+title('Natural response of \theta_2')
+saveas(gcf,'sysID_theta2swing','epsc')
+
 %% Test simple integration
 t_sim = t(1):0.001:t(end);
 theta2_0 = theta_2(1);
@@ -106,11 +113,12 @@ opt = nlgreyestOptions('Display', 'On');
 nlgr = nlgreyest(z,nlgr,opt);
 
 %%
-figure()
+f = figure();
+f.Position(3:4) = [540 300];
 compare(z,nlgr,Inf)
 ylabel('Angle (rad)')
 legend('Measured data', 'Identified model')
-saveas(gcf,'sysID_theta2','epsc')
+saveas(f,'sysID_theta2','epsc')
 
 %%
 figure()

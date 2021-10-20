@@ -13,6 +13,25 @@ M21 = m2*c2^2 + l1*m2*cos(theta2)*c2 + J2;
 M22 = m2*c2^2 + J2;
 ddtheta2 = F/M22 - M21/M22 * (-a11*dtheta1 - a12*V_in);
 
+%% 
+syms theta1 dtheta1 ddtheta1 theta2 dtheta2 ddtheta2 c_mot dc_mot ddc_mot real;
+syms m1 m2 k_gear J1 J2 l1 c1 c2 b1 b2 R_mot L_mot k_mot V_in real positive;
+
+g=9.81;
+a21 = 0.074571658157541;
+a22 = 117.7025981348793;
+J2_val = c2*m2*g/a22 - m2*c2^2;
+b2_val = a21 * c2*m2*g / a22;
+l1 = 0.097;
+
+
+F = -c2*l1*m2*sin(theta2)*dtheta1^2 - b2*dtheta2 + c2*g*m2*sin(theta1 + theta2);
+M21 = m2*c2^2 + l1*m2*cos(theta2)*c2 + J2;
+M22 = m2*c2^2 + J2;
+ddtheta2 = F/M22 - M21/M22 * (-a11*dtheta1 - a12*V_in);
+
+
+
 %% Linearize
 linState = [0;0;0;0];
 

@@ -18,15 +18,26 @@ sys_rob.InputName='u';
 sys_rob.OutputName={'theta_1', 'theta_2'};
 
 
+f = figure(1);
+f.Position(3:4) = [540 400];
 bplot = bodeplot(sys_rob);
-setoptions(bplot,'FreqUnits','Hz','PhaseVisible','off');
+setoptions(bplot,'FreqUnits','Hz','PhaseVisible','off','Grid','on');
+title('')
+saveas(f,'../../figures/robust_unc_plant','epsc')
 
 %%
 
+% Set 0
+ReferenceTarget1 = makeweight(db2mag(-50),[2*pi, db2mag(-10)],db2mag(0));
+ReferenceTarget2 = makeweight(db2mag(-50),[2*pi, db2mag(-10)],db2mag(0));
+ReferenceCost = makeweight(1, [100*2*pi, db2mag(-10)], db2mag(-50));
+% ReferenceCost = tf(1);
+
 % Set 1
-ReferenceTarget1 = 1.5*tf([1 0.001], [1 0.5]);
-ReferenceTarget2 = 1.2*tf([1 0.01], [1 10]);
-ReferenceCost = 0.001*tf([1 10000], [1,10]);
+ReferenceTarget1 = makeweight(db2mag(-50),[0.1*2*pi, db2mag(-10)],db2mag(0));
+ReferenceTarget2 = makeweight(db2mag(-50),[0.1*2*pi, db2mag(-10)],db2mag(0));
+ReferenceCost = makeweight(1, [100*2*pi, db2mag(-10)], db2mag(-50));
+% ReferenceCost = tf(1);
 
 % Set 2
 % ReferenceTarget1 = 1.5*tf([1 0.001], [1 0.5]);
@@ -45,9 +56,15 @@ Wcost = 1/ReferenceCost;
 Wcost.u= 'u';
 Wcost.y= 'z3';
 
+f = figure(2);
+f.Position(3:4) = [540 400];
+%set(f,'DefaultLineLineWidth',2)
 bplot = bodeplot(ReferenceTarget1, ReferenceTarget2, ReferenceCost);
+setoptions(bplot,'FreqUnits','Hz','PhaseVisible','off','Grid','on');
 legend('S1', 'S2', 'KS');
-setoptions(bplot,'FreqUnits','Hz','PhaseVisible','off');
+title('')
+set(findall(f,'type','line'),'linewidth',1.5)
+saveas(f,'../../figures/robust_targets','epsc')
 
 %%
 off1  = sumblk('off1 = r_theta1 - theta_1');
