@@ -55,4 +55,4 @@ inputDig = InputDigital.Data(1:end);
 
 % obs = observer.Data(1:end, :);
 
-save ../../data/sysID/square2Hz0p7 t theta_1 theta_2 input inputDig
+save ../../data/sysID/square0p5Hz0p7 t theta_1 theta_2 input inputDig

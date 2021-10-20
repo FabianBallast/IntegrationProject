@@ -24,5 +24,9 @@ Thetad1_0 = 0;
 Theta2_0 = 0.015;
 Thetad2_0 = 0;
 
+%% Save Simulink results
+
+save ../data/results/Robust_setfinal_dist angles_raw Input InputDigital hinf_dt
+
 
 
