@@ -22,7 +22,7 @@ close all;
 % ylabel('Input (-)')
 % xlabel('Time (seconds)')
 
-%%
+%% Load and preprocess data for validation
 load ../../data/sysID/sawtooth1;
 
 t_ID = t(1:952);
@@ -64,7 +64,7 @@ saveas(f,'sysID_sawtooth_input','epsc')
 
 data1 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Sawtooth');
 
-%%
+%% Load and preprocess data for identification
 load ../../data/sysID/chirp_deadzone;
 
 t_ID = t(1:1001);
@@ -92,25 +92,11 @@ title('Frequency sweep input signal')
 saveas(f,'sysID_chirp_input','epsc')
 
 
-%%
-% load data/constPar/motorPar
-% k = 1100;
-% zeta =0.3;
-% omega = 2.3 * 2 * pi; 
-
-
-% [A, B, C, D] = motorDyn(-a11,-a12,0);
-% lsys = ss(A,B,C,D);
-% y = lsim(lsys, U_ID, t_ID, [0;0]); 
-% plot(t_ID, Y_ID2); hold on;
-% plot(t_ID, y); hold off;
-
-%%
+%% Greybox estimation
 
 data = merge(data4);
 a11 = -44;
 a12 = -342.5;
-% data = iddata(y(:, 1), u, 0.1, 'Name', 'DC-motor');
 data.InputName = 'Voltage';
 data.InputUnit = 'V';
 data.OutputName = 'Angular position';
@@ -128,7 +114,8 @@ init_sys.Structure.Parameters(1).Minimum =-500;
 init_sys.Structure.Parameters(2).Minimum = -4000;
 opt = greyestOptions('InitialState', 'zero');
 sys = greyest(data,init_sys, opt);
-%%
+
+%% Validation
 opt = compareOptions('InitialCondition', 'zero');
 f = figure(2);
 f.Position(3:4) = [540 300];
@@ -136,17 +123,14 @@ compare(data1,sys, Inf, opt)
 ylabel('\theta_1 (radians)')
 saveas(f,'sysID_link1model_sawtooth','epsc')
 
-%%
-% figure(3)
-% compare(data2,sys,Inf,opt)
-% figure(4)
-% compare(data3,sys,Inf,opt)
+%% Compare training data and identified system
 f = figure(5);
 f.Position(3:4) = [540 300];
 compare(data4,sys,Inf,opt)
 ylabel('\theta_1 (radians)')
 saveas(f,'sysID_link1model_sweep','epsc')
-%%
+
+%% Improving result with PEM
 par = getpvec(sys);
 init_sys2 = idgrey('motorDyn',{'a11',par(1); 'a12', par(2)},'c');
 sys_pem = pem(data,init_sys2);
@@ -154,21 +138,3 @@ sys_pem = pem(data,init_sys2);
 %%
 figure(2);
 compare(data1,sys_pem,Inf,opt)
-
-%%
-% figure(3)
-% compare(data2,sys_pem,Inf,opt)
-% figure(4)
-% compare(data3,sys_pem,Inf,opt)
-
-%%
-% opt = n4sidOptions('Focus','simulation');
-% init_sys = n4sid(data,2);
-% sys = pem(data,init_sys);
-% figure(2)
-% compare(data1,sys,init_sys);
-%%
-% figure(3)
-% compare(data2,sys,init_sys);
-% figure(4)
-% compare(data3,sys,init_sys);

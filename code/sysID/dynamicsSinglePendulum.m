@@ -85,23 +85,11 @@ z = iddata(theta_2,[],0.01,'Name','Single Pendulum');
 
 fileName = 'singlePend2';
 order = [1 0 2];
-% Parameters = {b_sim*2; c2_sim; m2_sim*2; J2_sim*2; g_sim};
 Parameters = { b_sim/(m2_sim*c2_sim^2+J2_sim); c2_sim*g_sim*m2_sim/(m2_sim*c2_sim^2+J2_sim)};
 InitialStates = [theta_2(1);0];
 Ts = 0;
 nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
     'Name','Single Pendulum');
-
-% nlgr.Parameters(5).Fixed = true;
-% nlgr.Parameters(1).Minimum = 0;
-% nlgr.Parameters(2).Minimum = 0;
-% nlgr.Parameters(3).Minimum = 0;
-% nlgr.Parameters(4).Minimum = 0;
-% 
-% nlgr.Parameters(1).Maximum = 0.0004;
-% nlgr.Parameters(2).Maximum = 0.12;
-% nlgr.Parameters(3).Maximum = 1;
-% nlgr.Parameters(4).Maximum = 0.1;
 
 nlgr.Parameters(1).Minimum = 0;
 nlgr.Parameters(2).Minimum = 0;
@@ -112,7 +100,7 @@ nlgr.Parameters(2).Minimum = 0;
 opt = nlgreyestOptions('Display', 'On');
 nlgr = nlgreyest(z,nlgr,opt);
 
-%%
+%% Compare training data with identified model
 f = figure();
 f.Position(3:4) = [540 300];
 compare(z,nlgr,Inf)
@@ -120,21 +108,14 @@ ylabel('Angle (rad)')
 legend('Measured data', 'Identified model')
 saveas(f,'sysID_theta2','epsc')
 
-%%
+%% Attempt to improve the result with PEM
 figure()
 sys = pem(z,nlgr);
 compare(z,sys,Inf)
-%%
+
+%% Saving results
 par = getpvec(nlgr);
 a21 = par(1);
 a22 = par(2);
 
 save ../../data/constPar/th2_temp_par a21 a22
-
-% b2 = par(1);
-% c2 = par(2);
-% m2 = par(3);
-% J2 = par(4);
-% g = par(5);
-% 
-% save data/constPar/model_parameters b2 c2 g m2 J2

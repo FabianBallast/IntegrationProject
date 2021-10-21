@@ -17,7 +17,8 @@ Qd = diag([100, 0.1, 100, 0.1]); Rd = 25; %25 for better tracking, 50 for smooth
 
 % Rd = 1;
 
-Kd = dlqr(sysd.A, sysd.B, Qd, Rd)
+Kd = dlqr(sysd.A, sysd.B, Qd, Rd);
+disp(Kd)
 
 h = 0.01;
 %% Save gain

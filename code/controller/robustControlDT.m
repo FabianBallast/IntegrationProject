@@ -1,6 +1,7 @@
-% load data/controller/hinf_controller
+%% Loading the last designed controller
 load ../../data/controller/musyn_controller
 
+% Discretization of the controller
 hinf_dt = c2d(K, h);
 
 %% For the simulation with the model
@@ -26,7 +27,7 @@ Thetad2_0 = 0;
 
 %% Save Simulink results
 
-save ../data/results/Robust_setfinal_dist angles_raw Input InputDigital hinf_dt
+% save ../data/results/Robust_setfinal_dist angles_raw Input InputDigital hinf_dt
 
 
 
