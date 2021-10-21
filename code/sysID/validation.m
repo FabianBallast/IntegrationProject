@@ -1,12 +1,16 @@
 load ../../data/sysID/square0p5Hz0p7
 % load ../../data/sysID/square2Hz0p7
 
-t_ID = t(1:1000);
-Y_ID1 = theta_1(1:1000);
-Y_ID2 = theta_2(1:1000);
-in = inputDig(inputDig < -0.00001 | inputDig > 0.0001 | inputDig == 0);
-U_ID = in(2:1001);
+t_ID = t(1:1001);
+Y_ID1 = theta_1(1:1001);
+Y_ID2 = theta_2(1:1001);
+% in = inputDig(inputDig < -0.00001 | inputDig > 0.0001 | inputDig == 0);
+% U_ID = in(1:1001);
 [Y_ID1,Y_ID2] = preprocessing(Y_ID1, Y_ID2, t_ID);
+
+t = 0:0.01:7;
+in = 0.7*square(t*2*pi*0.5);
+U_ID = [zeros(1, 300),in];
 
 f = figure(1);
 f.Position(3:4) = [540 300];
@@ -59,18 +63,20 @@ saveas(f,'sysID_validation_input','epsc')
 %%
 
 load ../../data/constPar/model_parameters
-load ../../data/constPar/motorPar
+load ../../data/constPar/motorPar2
+load ../../data/constPar/th2_temp_par
 
 model_par.c2 = c2_val;
 model_par.b2 = b2_val;
 model_par.J2 = J2_val;
 model_par.g = g_val;
-model_par.l1 = l1_val;
+model_par.l1 = 0.097;
 model_par.m2 = m2_val;
 
 model_par.a11 = a11;
 model_par.a12 = a12;
-model_par.a22 = c2_val*g_val*m2_val/(m2_val*c2_val^2+J2_val);
+model_par.a22 = a22;
+model_par.a21 = a21;
 
 Theta1_0 = Y_ID1(1);
 Thetad1_0 = 0;
@@ -84,11 +90,11 @@ sim('../../simulink/simulate_with_data',10);
 %% Calculate fit
 
 V1 = Y_ID1;
-V2 = angles_raw.Data(1:end-1,1);
+V2 = angles_raw.Data(1:end,1);
 fit_theta1 = 100*(1 - norm(V1-V2)/norm(V1-mean(V1)));
 
 V1 = Y_ID2;
-V2 = angles_raw.Data(1:end-1,2);
+V2 = angles_raw.Data(1:end,2);
 fit_theta2 = 100*(1 - norm(V1-V2)/norm(V1-mean(V1)));
 
 %%
