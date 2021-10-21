@@ -1,4 +1,5 @@
-function [dx, y] = singlePend3(t, x, u, l1, varargin)
+function [dx, y] = singlePend4(t, x, u, l1, varargin)
+
 %SINGLEPEND Summary of this function goes here
 %   Detailed explanation goes here
 g = 9.81;

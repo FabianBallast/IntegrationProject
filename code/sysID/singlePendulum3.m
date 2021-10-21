@@ -10,9 +10,19 @@ Y_ID2 = Y_ID2;
 
 figure(1);
 plot(t_ID, Y_ID2)
+% plot(t_ID, Y_ID)
+ylabel('\theta_1 (radians)')
+xlabel('Time (seconds)')
+xlim([5 10])
+saveas(gcf,'../../figures/sysID_sweepv4_theta1','epsc')
 
 figure(2);
 plot(t_ID, th2);
+% plot(t_ID, theta_2(1:502));
+ylabel('\theta_2 (radians)')
+xlabel('Time (seconds)')
+xlim([5 10])
+saveas(gcf,'../../figures/sysID_sweepv4_theta2','epsc')
 
 data1 = iddata(Y_ID2, U_ID, 0.01, 'Name', 'Sweep');
 
@@ -26,13 +36,27 @@ hold on
 plot(t_ID,y1)
 hold off
 
+ylabel('\theta_1 (radians)')
+xlabel('Time (seconds)')
+xlim([5 10])
+title('Fitting of the polynomial')
+legend('Measured','Polynomial')
+saveas(gcf,'../../figures/sysID_sweepv4_polyfit','epsc')
+
 %%
 figure(2)
 a=diff(y1, 2) / 0.01^2;
 b = polyder(polyder(p));
 a = [a(1); a; a(end)];
 plot(t_ID, a); hold on;
-plot(t_ID, polyval(b, t_ID)); hold off;
+
+plot(t_ID, polyval(b, t_ID), 'LineWidth',1.5); hold off;
+ylabel('\theta_1 (radians)')
+xlabel('Time (seconds)')
+xlim([5 10])
+legend('Measured','Polynomial')
+%title('Second derivatives of the signals')
+saveas(gcf,'../../figures/sysID_sweepv4_polyfit_acc','epsc')
 
 %% NLID
 ddtheta1 = polyval(b, t_ID);
@@ -62,6 +86,7 @@ nlgr = nlgreyest(z,nlgr,opt);
 %%
 figure()
 compare(z,nlgr,Inf)
+
 %%
 sys = pem(z, nlgr);
 figure()
