@@ -42,22 +42,23 @@ u_th2 = [theta1, dtheta1, ddtheta1];
 
 z = iddata(th2,u_th2,0.01,'Name','Single Pendulum');
 
-fileName = 'singlePend4';
+fileName = 'singlePend3';
 order = [1 3 2];
 % Parameters = {b_sim*2; c2_sim; m2_sim*2; J2_sim*2; g_sim};
-Parameters = { 0.097};
+Parameters = { 0.1, 0.06};
 InitialStates = [th2(1);0];
 Ts = 0;
 nlgr = idnlgrey(fileName,order,Parameters,InitialStates,Ts, ...
     'Name','Single Pendulum');
 
-nlgr.Parameters(1).Minimum = 0.05;
+nlgr.Parameters(1).Minimum = 0;
+nlgr.Parameters(2).Minimum = 0;
 
-nlgr.Parameters(1).Maximum = 0.2;
+% nlgr.Parameters(1).Maximum = 0.4;
 % nlgr.Parameters(2).Maximum = 0.1;
 
 opt = nlgreyestOptions('Display', 'On');
-% nlgr = nlgreyest(z,nlgr,opt);
+nlgr = nlgreyest(z,nlgr,opt);
 %%
 figure()
 compare(z,nlgr,Inf)
